@@ -4,6 +4,7 @@ const checkElementExists = require("../support/check/checkElementExists");
 const checkElementValue = require("../support/check/checkElementValue");
 const sendKeys = require("../support/action/sendKeys");
 const clickElement = require("../support/action/clickElement");
+const {strict: assert} = require("assert");
 
 Given(/^Empty ToDo list$/, async function () {
     await openUrl.call(this, "/")
@@ -15,6 +16,7 @@ Given(/^Empty ToDo list$/, async function () {
 When(/^User write "([^"]*)" to text box and click to add button$/, async function (newTodo) {
     await sendKeys.call(this, "#todo-input", newTodo)
     await clickElement.call(this, "#add-todo")
+    await this.page.waitForTimeout(3000)
 });
 
 Then(/^User should see "([^"]*)" item in ToDo list$/, async function (task) {
@@ -29,5 +31,4 @@ Then(/^User should see "([^"]*)" item in ToDo list$/, async function (task) {
         task
     )
     assert.strictEqual(todoTitle, task);
-
 });
