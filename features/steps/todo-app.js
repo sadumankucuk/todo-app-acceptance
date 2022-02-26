@@ -17,6 +17,17 @@ When(/^User write "([^"]*)" to text box and click to add button$/, async functio
     await clickElement.call(this, "#add-todo")
 });
 
-Then(/^User should see "([^"]*)" item in ToDo list$/, function () {
+Then(/^User should see "([^"]*)" item in ToDo list$/, async function (task) {
+    const selector = '#todo-list-item'
+    const todoTitle = await this.page.$$eval(
+        selector,
+        async (items, task) => {
+            const todo = items.find(item => item.querySelector("#todo-text").textContent === task)
+            const todoTitle = todo.querySelector("#todo-text").textContent
+            return todoTitle
+        },
+        task
+    )
+    assert.strictEqual(todoTitle, task);
 
 });
